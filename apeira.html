@@ -143,9 +143,10 @@ section{ padding:34px 0; }
 .popup.in{ opacity:1; transform:none; }
 .popup:hover{ border-color:#9A9994; }
 .popup .stop-blurb{ font-size:13px; }
+.popup .ph{ aspect-ratio:16 / 9; }
 .leaders{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:3; overflow:visible; color:var(--ink); }
 .leaders line{ stroke:var(--ink); stroke-width:1.5; opacity:.5; }
-.map-stage{ position:relative; width:430px; max-width:84vw; margin:54px auto 0; aspect-ratio:660 / 844.3; overflow:visible; }
+.map-stage{ position:relative; width:430px; max-width:84vw; margin:290px auto 0; aspect-ratio:660 / 844.3; overflow:visible; }
 svg.italy{ position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
 .italy .land{ fill:#ECEAE4; stroke:#D6D4CD; stroke-width:1.1; stroke-linejoin:round; filter:drop-shadow(0 12px 20px rgba(0,0,0,.10)); }
 .route-base{ fill:none; stroke:#C2C0B8; stroke-width:2.4; stroke-dasharray:1.5 9; stroke-linecap:round; }
@@ -460,31 +461,29 @@ footer a{ color:var(--ink); text-decoration:none; }
   }
 
   // posiziona ogni pop-up nei lati liberi, vicino alla latitudine della sua città; nessuna sovrapposizione
+  // zone attorno alla mappa: sopra (Torino/Milano), lati (Genova/Roma sx, Bologna/Napoli dx), sotto-centro (Catania)
   function layout() {
     if (!built) return;
     var sRect = stageFull.getBoundingClientRect(), mRect = mapStage.getBoundingClientRect();
     var mx = mRect.left - sRect.left, my = mRect.top - sRect.top, mw = mRect.width, mh = mRect.height;
-    var GAP = 26, popW = popEls[cities[0].key].offsetWidth || 222;
+    var cx = mx + mw / 2, GAP = 22, popW = popEls[cities[0].key].offsetWidth || 222;
     cities.forEach(function (c) { c.px = mx + c.x / VBW * mw; c.py = my + c.y / VBH * mh; });
-    var leftC = [], rightC = [];
-    cities.forEach(function (c) { (c.x < VBW * 0.34 ? leftC : rightC).push(c); });
-    leftC.sort(function (a, b) { return a.py - b.py; });
-    rightC.sort(function (a, b) { return a.py - b.py; });
-    function place(arr, side) {
-      var prevB = -1e9;
-      arr.forEach(function (c) {
-        var pop = popEls[c.key], ph = pop.offsetHeight || 200;
-        var left = side === 'L' ? (mx - GAP - popW) : (mx + mw + GAP);
-        left = Math.max(10, Math.min(left, sRect.width - popW - 10));
-        var top = c.py - ph / 2;
-        if (top < prevB + 16) top = prevB + 16;
-        top = Math.max(8, top);
-        prevB = top + ph;
-        pop.style.left = left + 'px'; pop.style.top = top + 'px';
-        pop._side = side;
-      });
+    function H(k) { return popEls[k].offsetHeight || 210; }
+    function setPos(k, left, top, zone) {
+      if (!popEls[k]) return;
+      left = Math.max(10, Math.min(left, sRect.width - popW - 10));
+      top = Math.max(6, top);
+      var p = popEls[k]; p.style.left = left + 'px'; p.style.top = top + 'px'; p._zone = zone;
     }
-    place(leftC, 'L'); place(rightC, 'R');
+    var leftX = mx - GAP - popW, rightX = mx + mw + GAP;
+    var topY = Math.max(6, my - GAP - Math.max(H('Torino'), H('Milano')));
+    setPos('Torino', cx - popW - 14, topY, 'top');     // sopra-sinistra
+    setPos('Milano', cx + 14, topY, 'top');            // sopra-destra
+    setPos('Genova', leftX, my + 6, 'left');           // lato sinistro, alto
+    setPos('Roma',   leftX, my + 18 + H('Genova'), 'left');  // lato sinistro, basso
+    setPos('Bologna', rightX, my + 6, 'right');        // lato destro, alto
+    setPos('Napoli',  rightX, my + 18 + H('Bologna'), 'right'); // lato destro, basso
+    setPos('Catania', cx - popW / 2, my + mh + GAP, 'bottom');  // sotto la Sicilia, centrato
     var maxB = my + mh;
     cities.forEach(function (c) { var p = popEls[c.key]; maxB = Math.max(maxB, p.offsetTop + p.offsetHeight); });
     stageFull.style.height = (maxB + 24) + 'px';
@@ -496,8 +495,11 @@ footer a{ color:var(--ink); text-decoration:none; }
     cities.forEach(function (c) {
       var pop = popEls[c.key];
       if (!pop || !pop.classList.contains('in')) return;
-      var ex = pop._side === 'L' ? pop.offsetLeft + pop.offsetWidth : pop.offsetLeft;
-      var ey = pop.offsetTop + Math.min(pop.offsetHeight / 2, 28);
+      var x = pop.offsetLeft, y = pop.offsetTop, w = pop.offsetWidth, h = pop.offsetHeight, ex, ey;
+      if (pop._zone === 'top') { ex = x + w / 2; ey = y + h; }
+      else if (pop._zone === 'bottom') { ex = x + w / 2; ey = y; }
+      else if (pop._zone === 'left') { ex = x + w; ey = y + h / 2; }
+      else { ex = x; ey = y + h / 2; }
       var ln = document.createElementNS(SVGNS, 'line');
       ln.setAttribute('x1', c.px.toFixed(1)); ln.setAttribute('y1', c.py.toFixed(1));
       ln.setAttribute('x2', ex.toFixed(1)); ln.setAttribute('y2', ey.toFixed(1));
