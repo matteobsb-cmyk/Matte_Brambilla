@@ -67,7 +67,7 @@ a{ color:inherit; }
 .wrap{ max-width:1120px; margin:0 auto; padding:0 32px; }
 
 /* ---- hero ---- */
-.hero{ display:grid; grid-template-columns:1fr 1.05fr; gap:48px; align-items:center; padding:70px 0 56px; }
+.hero{ display:grid; grid-template-columns:1fr 1.05fr; gap:48px; align-items:start; padding:70px 0 56px; }
 .status{ display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:12px; color:var(--ink); border:1px solid var(--border); border-radius:999px; padding:6px 12px; margin-bottom:22px; }
 .status .d{ width:7px; height:7px; border-radius:50%; background:var(--ink); animation:pulse 2s infinite; }
 @keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.3; } }
@@ -90,7 +90,8 @@ h1{ font-family:var(--font-display); font-weight:700; font-size:clamp(3rem,7.5vw
 .btn-sm{ font-size:13.5px; padding:9px 15px; }
 
 /* ---- launch film (pannello "cinema" caldo) ---- */
-.film{ background:#F4EEE3; border:1px solid #E9E1D2; border-radius:20px; padding:20px 20px 16px; box-shadow:var(--shadow); }
+.film{ background:#F4EEE3; border:1px solid #E9E1D2; border-radius:20px; padding:20px 20px 16px; box-shadow:var(--shadow); margin-top:12px; }
+@media (max-width:860px){ .film{ margin-top:8px; } }
 .film-title{ font-family:'Caveat', cursive; font-weight:600; font-size:30px; line-height:1; color:#2A2522; text-align:center; margin-bottom:12px; }
 .film-stage{ position:relative; padding:9px; }
 .film-stage .corner{ position:absolute; width:20px; height:20px; border:2.5px solid #3a342e; z-index:3; }
@@ -258,7 +259,6 @@ footer a{ color:var(--ink); text-decoration:none; }
             <button class="film-play" type="button" aria-label="Play the launch film"><span class="pbtn"></span></button>
           </div>
         </div>
-        <div class="film-credit">For the misfits • Directed by Alessandro Mascheroni, 2026</div>
       </div>
     </div>
   </div>
@@ -294,10 +294,10 @@ footer a{ color:var(--ink); text-decoration:none; }
               <img class="van-img" src="assets/img/van.png" alt="" onload="this.closest('.van').classList.add('has-img')" onerror="this.remove()">
             </div>
           </div>
-          <div class="tour-badge"><span class="d"></span> Apeira Tour · 6 stops</div>
         </div>
       </div>
       <div class="tour-controls">
+        <button class="btn btn-ghost btn-sm" id="skipTour" type="button">Skip ⏭</button>
         <button class="btn btn-ghost btn-sm" id="replayTour" type="button">↻ Replay tour</button>
       </div>
 
@@ -573,7 +573,10 @@ footer a{ color:var(--ink); text-decoration:none; }
     autoObserver.observe(mapStage);
   }
 
+  var skipBtn = section.querySelector('#skipTour');
+  function skipAll() { cancel(); cities.forEach(function (c) { reveal(c); }); placeVan(cities[cities.length - 1].len); }
   replayBtn && replayBtn.addEventListener('click', function () { build(); playTour(); });
+  skipBtn && skipBtn.addEventListener('click', function () { build(); skipAll(); });
 
   var rt;
   window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { syncMode(); layout(); }, 160); });
