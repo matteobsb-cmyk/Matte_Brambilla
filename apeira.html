@@ -172,7 +172,8 @@ svg.italy{ position:absolute; inset:0; width:100%; height:100%; overflow:visible
 
 .tour-badge{ position:absolute; left:2px; bottom:2px; display:inline-flex; align-items:center; gap:8px; background:#fff; border:1px solid var(--border); border-radius:999px; padding:7px 13px; font-family:var(--font-mono); font-size:12px; color:var(--ink); box-shadow:var(--shadow); z-index:5; }
 .tour-badge .d{ width:7px; height:7px; border-radius:50%; background:var(--ink); }
-.tour-controls{ display:flex; justify-content:center; gap:10px; margin-top:20px; }
+.tour-controls{ display:none; }
+.mode-map .tour-controls{ display:flex; position:sticky; top:60px; z-index:30; gap:10px; margin:4px 0 18px; }
 
 /* photos (usate sia nelle card-lista sia nei pop-up) */
 .stop-city{ font-family:var(--font-mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
@@ -272,6 +273,10 @@ footer a{ color:var(--ink); text-decoration:none; }
       <p class="lead">We engaged 600+ builders and visited key innovation hubs like the Apple Developer Academy in Naples and the Bending Spoons offices, alongside fantastic guests such as Alberto Sangiovanni-Vincentelli.</p>
       <p class="tour-stats"><b>600+ builders</b><span>·</span><b>6 cities</b><span>·</span><b>~20 events</b></p>
 
+      <div class="tour-controls">
+        <button class="btn btn-ghost btn-sm" id="skipTour" type="button">Skip animation</button>
+        <button class="btn btn-ghost btn-sm" id="replayTour" type="button">↻ Replay tour</button>
+      </div>
       <!-- mappa interattiva a tutta larghezza: pop-up attorno alla mappa con frecce -->
       <div class="tour-stage" aria-hidden="true">
         <svg class="leaders"><defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0B0B0B"/></marker></defs></svg>
@@ -295,10 +300,6 @@ footer a{ color:var(--ink); text-decoration:none; }
             </div>
           </div>
         </div>
-      </div>
-      <div class="tour-controls">
-        <button class="btn btn-ghost btn-sm" id="skipTour" type="button">Skip animation</button>
-        <button class="btn btn-ghost btn-sm" id="replayTour" type="button">↻ Replay tour</button>
       </div>
 
       <!-- contenuto delle tappe: è anche il fallback verticale (mobile / no-JS) -->
