@@ -146,7 +146,7 @@ section{ padding:34px 0; }
 .popup .ph{ aspect-ratio:16 / 9; }
 .leaders{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:3; overflow:visible; color:var(--ink); }
 .leaders line{ stroke:var(--ink); stroke-width:1.5; opacity:.5; }
-.map-stage{ position:relative; width:430px; max-width:84vw; margin:290px auto 0; aspect-ratio:660 / 844.3; overflow:visible; }
+.map-stage{ position:relative; width:390px; max-width:80vw; margin:290px auto 0; aspect-ratio:660 / 844.3; overflow:visible; }
 svg.italy{ position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
 .italy .land{ fill:#ECEAE4; stroke:#D6D4CD; stroke-width:1.1; stroke-linejoin:round; filter:drop-shadow(0 12px 20px rgba(0,0,0,.10)); }
 .route-base{ fill:none; stroke:#C2C0B8; stroke-width:2.4; stroke-dasharray:1.5 9; stroke-linecap:round; }
@@ -481,13 +481,16 @@ footer a{ color:var(--ink); text-decoration:none; }
     // colonne laterali centrate negli spazi vuoti a sx/dx (sfrutta tutta la larghezza)
     var leftX = (mx - popW) / 2;
     var rightX = (mx + mw) + (sw - (mx + mw) - popW) / 2;
+    var colTop = 14; // colonne laterali in alto, così tutto resta nello schermo
     setPos('Torino', cx - popW - 14, my - GAP - H('Torino'), 'top');   // sopra la mappa, sinistra
     setPos('Milano', cx + 14, my - GAP - H('Milano'), 'top');          // sopra la mappa, destra
-    setPos('Genova', leftX, my + 8, 'left');                            // spazio vuoto sinistro, alto
-    setPos('Roma',   leftX, my + 22 + H('Genova'), 'left');             // spazio vuoto sinistro, basso
-    setPos('Bologna', rightX, my + 8, 'right');                         // spazio vuoto destro, alto
-    setPos('Napoli',  rightX, my + 22 + H('Bologna'), 'right');         // spazio vuoto destro, basso
-    setPos('Catania', cx - popW / 2, my + mh + GAP, 'bottom');          // sotto la Sicilia, centrato
+    // colonna sinistra (dall'alto): Genova, Roma, Catania
+    setPos('Genova', leftX, colTop, 'left');
+    setPos('Roma',   leftX, colTop + 16 + H('Genova'), 'left');
+    setPos('Catania', leftX, colTop + 32 + H('Genova') + H('Roma'), 'left');
+    // colonna destra (dall'alto): Bologna, Napoli
+    setPos('Bologna', rightX, colTop, 'right');
+    setPos('Napoli',  rightX, colTop + 16 + H('Bologna'), 'right');
     var maxB = my + mh;
     cities.forEach(function (c) { var p = popEls[c.key]; maxB = Math.max(maxB, p.offsetTop + p.offsetHeight); });
     stageFull.style.height = (maxB + 24) + 'px';
