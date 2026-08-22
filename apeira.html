@@ -195,6 +195,15 @@ svg.italy{ position:absolute; inset:0; width:100%; height:100%; overflow:visible
 .tour-list{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:16px; margin-top:8px; }
 .tour-list .stop{ display:flex; flex-direction:column; }
 
+/* programmi ricorrenti (crepuscolo + microgrant): due card affiancate */
+.prog-grid{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:16px; margin-top:26px; }
+.prog{ display:flex; flex-direction:column; }
+.prog-kicker{ font-family:var(--font-mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+.prog-title{ font-family:var(--font-display); font-weight:600; font-size:1.25rem; line-height:1.2; color:var(--ink); margin-bottom:8px; }
+.prog-blurb{ font-size:15px; color:var(--body); }
+.prog-stat{ font-family:var(--font-mono); font-size:12px; color:var(--ink); margin-top:auto; padding-top:16px; }
+.prog-stat span{ color:var(--muted); }
+
 /* modalità mappa: stage a tutta larghezza, pop-up posizionati attorno alla mappa */
 .mode-map .tour-stage{ display:flow-root; position:relative; width:100vw; margin-left:calc(50% - 50vw); }
 .mode-map .tour-list{ display:none; }
@@ -210,6 +219,7 @@ footer a{ color:var(--ink); text-decoration:none; }
   .hero{ grid-template-columns:1fr; gap:30px; padding:44px 0 36px; }
   .wrap{ padding:0 20px; }
   .tour-list{ grid-template-columns:1fr; }
+  .prog-grid{ grid-template-columns:1fr; }
   .topbar{ padding:13px 20px; }
 }
 
@@ -240,6 +250,7 @@ footer a{ color:var(--ink); text-decoration:none; }
         <p class="blurb">we gather europe's most curious builders into a single house in milan and give them everything they need to do the most ambitious work of their lives.</p>
         <div class="ctas">
           <a href="#tour" class="tourlink">see the tour ↓</a>
+          <a href="#programs" class="tourlink">what we run all year ↓</a>
         </div>
       </div>
       <div class="film">
@@ -358,6 +369,31 @@ footer a{ color:var(--ink); text-decoration:none; }
           </div>
           <h3 class="stop-title">Fireside chat with Valentina Jerusalmi</h3>
           <p class="stop-blurb">General Manager at Bending Spoons (Mosaic, AOL): scaling, acquisitions and operational execution. Home of the house, the final stop.</p>
+        </article>
+      </div>
+    </section>
+  </div>
+
+  <!-- I PROGRAMMI RICORRENTI: crepuscolo + microgrant -->
+  <div class="wrap">
+    <section id="programs" class="reveal">
+      <p class="sec-label"><span class="n">02</span> / beyond the tour</p>
+      <h2 class="sec-h">the tour was the launch. this is what runs all year.</h2>
+      <p class="lead">apeira isn't only a house and a van. two things keep it alive between the stops: a weekly hackerspace in milan, and microgrants for the people who are too impatient to wait their turn.</p>
+
+      <div class="prog-grid">
+        <article class="prog card">
+          <p class="prog-kicker">weekly · milan</p>
+          <h3 class="prog-title">crepuscolo</h3>
+          <p class="prog-blurb">a weekly hackerspace where builders and creatives meet, build, and share experiences. what started as a handful of people in a room is now the recurring appointment the house is built around.</p>
+          <p class="prog-stat"><b>500+ builders and creatives</b> <span>·</span> every week</p>
+        </article>
+
+        <article class="prog card">
+          <p class="prog-kicker">open call · italy</p>
+          <h3 class="prog-title">microgrants</h3>
+          <p class="prog-blurb">we distribute microgrants to high school students who don't want to wait for college to become scientists. no institution, no committee: money and people to help them start now.</p>
+          <p class="prog-stat"><b>high-school students</b> <span>·</span> no waiting list</p>
         </article>
       </div>
     </section>
